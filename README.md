@@ -96,11 +96,8 @@ Class imbalance (especially `trash`) is handled via **WeightedRandomSampler**.
 
 </div>
 
-### Training History
-![Training History](docs/training_history.png)
-
 ### Confusion Matrix
-![Confusion Matrix](docs/confusion_matrix.png)
+![Confusion Matrix](ecosort_output/confusion_matrix.png)
 
 ---
 
