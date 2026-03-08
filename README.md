@@ -11,8 +11,6 @@
 
 An end-to-end AI-powered waste classification system that identifies waste into **6 categories** using **EfficientNetV2-M** with a real-time desktop GUI.
 
-![GUI Preview](docs/gui_screenshot.png)
-
 </div>
 
 ---
