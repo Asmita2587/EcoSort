@@ -1,19 +1,53 @@
-# 🌿 EcoSort — Smart Waste Sorting System
+<div align="center">
 
-> Image-recognition-powered waste classification using **EfficientNetV2-M**  
-> Trained on the **TrashNet** dataset · 6 waste classes · Target accuracy **≥ 95 %**
+# 🌿 EcoSort
+### Smart Waste Sorting System
+
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=flat&logo=python&logoColor=white)](https://python.org)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.1%2B-EE4C2C?style=flat&logo=pytorch&logoColor=white)](https://pytorch.org)
+[![Accuracy](https://img.shields.io/badge/Accuracy-94.99%25-22c55e?style=flat)](#results)
+[![License](https://img.shields.io/badge/License-MIT-6366f1?style=flat)](LICENSE)
+[![Dataset](https://img.shields.io/badge/Dataset-TrashNet-f59e0b?style=flat)](https://www.kaggle.com/datasets/feyzazkefe/trashnet)
+
+An end-to-end AI-powered waste classification system that identifies waste into **6 categories** using **EfficientNetV2-M** with a real-time desktop GUI.
+
+![GUI Preview](docs/gui_screenshot.png)
+
+</div>
 
 ---
 
-## 📁 Project Structure
+## 📌 Overview
+
+EcoSort uses deep learning to classify waste images into 6 categories — **cardboard, glass, metal, paper, plastic, and trash** — and provides recycling guidance, bin color, and CO₂ impact for each classification. Built with PyTorch and a custom Tkinter GUI with live webcam support.
+
+---
+
+## ✨ Features
+
+- 🧠 **EfficientNetV2-M** — 94.99% validation accuracy on TrashNet
+- 📷 **Live Webcam Feed** — 30 FPS real-time capture and classification
+- 📊 **Top-3 Predictions** — Animated confidence bars for top results
+- ♻️ **Recycling Guidance** — Bin color, disposal tips, and CO₂ savings
+- 🕘 **Session History** — Color-coded chips for last 10 classifications
+- ⚡ **GPU Accelerated** — CUDA + Mixed Precision (AMP) training
+
+---
+
+## 🗂️ Project Structure
 
 ```
-ecosort/
-├── train.py           # Full training pipeline
-├── inference.py       # Inference + recycling metadata
-├── app.py             # Tkinter GUI application
-├── requirements.txt
-└── ecosort_output/    # Created automatically after training
+EcoSort/
+├── train.py              # Full training pipeline
+├── inference.py          # Model inference + recycling metadata
+├── app.py                # Tkinter GUI application
+├── requirements.txt      # Dependencies
+├── README.md
+├── docs/                 # Screenshots and plots
+│   ├── gui_screenshot.png
+│   ├── training_history.png
+│   └── confusion_matrix.png
+└── ecosort_output/       # Auto-generated after training
     ├── ecosort_best.pth
     ├── training_history.png
     └── confusion_matrix.png
@@ -21,74 +55,110 @@ ecosort/
 
 ---
 
-## 🧠 Why EfficientNetV2-M?
+## 🧠 Model
 
-| Model | Params | ImageNet Top-1 | TrashNet Est. Acc | Speed |
+| Model | Params | ImageNet Acc | TrashNet Acc | Speed |
 |---|---|---|---|---|
-| ResNet-50 | 25 M | 76.1 % | ~88 % | Fast |
-| EfficientNet-B4 | 19 M | 83.4 % | ~91 % | Fast |
-| **EfficientNetV2-M** | **54 M** | **85.1 %** | **~95 %** | Medium |
-| ViT-L/16 | 307 M | 88.7 % | ~96 % | Slow |
+| ResNet-50 | 25M | 76.1% | ~88% | Fast |
+| EfficientNet-B4 | 19M | 83.4% | ~91% | Fast |
+| **EfficientNetV2-M** ✅ | **54M** | **85.1%** | **94.99%** | Medium |
+| ViT-L/16 | 307M | 88.7% | ~96% | Slow |
 
-EfficientNetV2-M delivers the best **accuracy-to-compute tradeoff** for TrashNet:
-- Progressive learning with **Mixup + CutMix** augmentation
-- **Label smoothing** (0.1) for better calibration
-- **Cosine Annealing with Warm Restarts** scheduler
-- **Weighted Random Sampler** for class imbalance
-- **Mixed Precision (AMP)** for faster GPU training
-- **Early stopping** with patience
+**EfficientNetV2-M** was selected for the best accuracy-to-compute tradeoff.
+
+
+## 📊 Dataset
+
+| Class | Samples |
+|---|---|
+| Paper | 594 |
+| Glass | 501 |
+| Plastic | 482 |
+| Metal | 410 |
+| Cardboard | 403 |
+| Trash | 137 |
+| **Total** | **~2,527** |
+
+Source: [TrashNet on Kaggle](https://www.kaggle.com/datasets/feyzazkefe/trashnet)
+
+Class imbalance (especially `trash`) is handled via **WeightedRandomSampler**.
+
+---
+
+## 📈 Results
+
+<div align="center">
+
+| Metric | Value |
+|---|---|
+| Validation Accuracy | **94.99%** |
+| Training Epochs | 17 (early stopping) |
+| Device | NVIDIA RTX 3050 |
+| Training Time | ~40 minutes |
+
+</div>
+
+### Training History
+![Training History](docs/training_history.png)
+
+### Confusion Matrix
+![Confusion Matrix](docs/confusion_matrix.png)
 
 ---
 
 ## 🚀 Quick Start
 
-### 1 · Install Dependencies
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/Asmita2587/EcoSort.git
+cd EcoSort
+```
+
+### 2. Create Virtual Environment
+
+```bash
+python -m venv venv
+
+# Windows
+venv\Scripts\activate
+
+# Mac/Linux
+source venv/bin/activate
+```
+
+### 3. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2 · Download TrashNet Dataset
-
+For NVIDIA GPU (recommended):
 ```bash
-# Option A — Kaggle CLI
-pip install kaggle
-kaggle datasets download -d fedesoriano/trashnet-dataset
-unzip trashnet-dataset.zip -d dataset/
-
-# Option B — Manual
-# Download from https://www.kaggle.com/datasets/fedesoriano/trashnet-dataset
-# Extract so you have:  dataset/cardboard/  dataset/glass/  etc.
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
 ```
 
-### 3 · Train the Model
+### 4. Download Dataset
+
+```bash
+kaggle datasets download -d feyzazkefe/trashnet
+```
+Extract to a folder named `dataset-resized/` inside the project root.
+
+### 5. Train the Model
 
 ```bash
 python train.py
 ```
 
-Expected output:
-```
-[EcoSort] Using device: cuda
-[EcoSort] Train=1772  Val=379  Test=380
-Epoch [001/050]  Train Loss: 1.3241  Acc: 62.14%  |  Val Loss: 0.8832  Acc: 78.36%  ...
-...
-Epoch [035/050]  Train Loss: 0.2114  Acc: 94.71%  |  Val Loss: 0.1983  Acc: 95.22%  ...
-  ✅ New best saved — Val Acc: 95.22%
-```
 
-Training generates:
-- `ecosort_output/ecosort_best.pth` — Best model checkpoint
-- `ecosort_output/training_history.png` — Loss / Accuracy / LR curves
-- `ecosort_output/confusion_matrix.png` — Per-class confusion matrix
-
-### 4 · Launch the GUI
+### 6. Launch GUI
 
 ```bash
 python app.py
 ```
 
-### 5 · Command-Line Inference
+### 7. Command-Line Inference
 
 ```bash
 python inference.py path/to/image.jpg
@@ -96,67 +166,70 @@ python inference.py path/to/image.jpg
 
 ---
 
-## 📊 Dataset Info — TrashNet
+## 🖥️ GUI Usage
 
-| Class | Approx Samples |
-|---|---|
-| cardboard | 403 |
-| glass | 501 |
-| metal | 410 |
-| paper | 594 |
-| plastic | 482 |
-| trash | 137 |
-| **Total** | **~2,527** |
-
-> The class imbalance (especially `trash`) is handled via **WeightedRandomSampler**.
-
----
-
-## ⚙️ Training Techniques Explained
-
-| Technique | Why It Helps |
-|---|---|
-| **Transfer Learning** (ImageNet) | Starts with powerful visual features instead of random init |
-| **Progressive Unfreezing** | Freeze early layers → unfreeze all at epoch 15, prevents catastrophic forgetting |
-| **Mixup α=0.4** | Linearly interpolates two images; forces smoother decision boundaries |
-| **CutMix α=1.0** | Replaces image regions with patches from another; teaches local features |
-| **Label Smoothing 0.1** | Prevents overconfidence, better calibration |
-| **Cosine Annealing W/ Restarts** | Escapes local minima, converges to flatter (better-generalizing) solutions |
-| **WeightedRandomSampler** | Each batch sees all classes equally despite imbalance |
-| **AMP (float16)** | 2× speedup on GPU with negligible accuracy loss |
-| **Gradient Clipping** | Prevents exploding gradients |
-| **RandomErasing** | Simulates occlusion robustness |
-
----
-
-## 🖥️ GUI Features
-
-- **Open Image** — Load from file
-- **Capture** — Grab from webcam (requires opencv-python)
-- **Classify** — Instant prediction with confidence %
-- **Top-3 bar chart** — See alternative predictions
-- **Recycling info** — Bin color, recycling tip, CO₂ impact
-- **Session history** — Color-coded chips for last 8 classifications
+1. Click **📂 Open Image** to load a waste photo
+2. Or click **📷 Camera** to open the live webcam preview
+3. Click **🔍 CLASSIFY WASTE**
+4. View result: class, confidence %, bin color, recycling tip, CO₂ savings
 
 ---
 
 ## 🔧 Configuration
 
-Edit the `CONFIG` dict at the top of `train.py`:
+Edit `CONFIG` at the top of `train.py`:
 
 ```python
 CONFIG = {
-    "data_dir":        "dataset/",    # path to your TrashNet folder
-    "img_size":        384,           # reduce to 300 for faster training
-    "batch_size":      32,            # reduce to 16 if OOM on GPU
-    "num_epochs":      50,
-    "lr_init":         1e-3,
-    "early_stop_patience": 10,
+    "data_dir":            "dataset-resized/",
+    "img_size":            224,     # increase to 384 for higher accuracy
+    "batch_size":          64,      # reduce to 32 if GPU runs out of memory
+    "num_epochs":          30,
+    "lr_init":             1e-3,
+    "early_stop_patience": 8,
 }
 ```
 
 ---
 
+## 📦 Requirements
+
+```
+torch >= 2.1.0
+torchvision >= 0.16.0
+Pillow >= 10.0.0
+numpy >= 1.24.0
+scikit-learn >= 1.3.0
+matplotlib >= 3.7.0
+seaborn >= 0.12.0
+opencv-python >= 4.8.0
+```
+
+---
+
+## 🔗 Model Download
+
+The trained model weights (`ecosort_best.pth`) exceed GitHub's file size limit.
+
+👉 **[Download from Google Drive](https://drive.google.com/file/d/1kivMPdHTLe-I3nCnXM00Y4q0irWZT7Vj/view?usp=sharingNK)**
+
+Place it at: `ecosort_output/ecosort_best.pth`
+
+---
+
 ## 📜 License
 
-MIT — Free to use, modify, and distribute.
+This project is licensed under the **MIT License** — see [LICENSE](LICENSE) for details.
+
+---
+
+## 👩‍💻 Author
+
+**Asmita**
+- GitHub: [Asmita2587](https://github.com/Asmita2587)
+
+---
+
+<div align="center">
+  Made with ❤️ and ♻️ for a cleaner planet
+</div>
