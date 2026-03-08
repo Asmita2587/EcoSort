@@ -96,10 +96,6 @@ Class imbalance (especially `trash`) is handled via **WeightedRandomSampler**.
 
 </div>
 
-### Confusion Matrix
-![Confusion Matrix](ecosort_output/confusion_matrix.png)
-
----
 
 ## 🚀 Quick Start
 
