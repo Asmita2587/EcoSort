@@ -220,7 +220,3 @@ This project is licensed under the **MIT License** — see [LICENSE](LICENSE) fo
 - GitHub: [Asmita2587](https://github.com/Asmita2587)
 
 ---
-
-<div align="center">
-  Made with ❤️ and ♻️ for a cleaner planet
-</div>
