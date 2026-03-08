@@ -1,0 +1,11 @@
+venv/
+dataset-resized/
+dataset/
+*.zip
+ecosort_output/*.pth
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
